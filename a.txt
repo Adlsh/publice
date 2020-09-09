@@ -1,13 +1,2 @@
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsR8+u/WUC6dSXYH6QEcmD0RlHHuOP/6/sv0G62EoQhw+j6HDly+nb+lwRQnk2apiyra61YfNvjQ2zB1FI/I4P8Whh+G0UAdk8noVVdPe54jpt1Ryt3JfkmBJhNKiL985DiZqaTKUTsMAIJIj4HiBv57wMzLEgfvNLhhuDyvnHG7xnRNljJQwtH+iV5n/cYXyh20H64DGOkmrejvTxVy4UAJnWN8LaKHpZUNIhjwvPFinxbkmtF5vS/Dry1L8/+EhE4I0dM9RkaUCIqMJ8/ZpSxkct7hciUoUm9oYnotvk/rMWQUhcCl41vs7vexE5p6/rZWH81YtDzHYKqoG+KDil laishanhua
 
-
-47.115.129.169:13389
-administrator 
-111
-
-svn://47.115.129.169:13690/test
-laishanhua  laishanhua123@
-
-47.115.129.169 15000 test
-47.115.129.169 15001 benet
-
