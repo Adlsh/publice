@@ -33,5 +33,3 @@ git pull 同步到本地
 
 
 https://github.com/lshanhua/pub.git
-Adlsh
-lshanhua123@
