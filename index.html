@@ -1,2 +1,579 @@
-hello,world
-hello,Mr,hi
+<!DOCTYPE HTML> 
+<html> 
+<head runat="server">  
+    <title></title>
+<meta charset="UTF-8">
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+ 
+ 
+    <!-- 可选的Bootstrap主题文件（一般不使用） -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+ 
+ 
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+ 
+ 
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .booth {
+            width:800px;
+            background:#ccc;
+            border: 10px solid #ddd;
+            margin: 0 auto;
+        }
+        #result_video{
+            width:400px;
+            height:300px;
+            margin:0 auto;
+        }
+        div#triangle  
+        {  
+            height: 0;  
+            width: 0;  
+            background-color: transparent;  
+            border-bottom: 40px solid blue;  
+            border-left: 15px solid transparent;  
+            border-right: 15px solid transparent;  
+            -webkit-transform: rotate(0deg);  
+            position:absolute;
+            top: 120px;
+            left:215px; 
+        }  
+    </style>
+ 
+ 
+<!--     <script type="text/javascript">
+        var remaining_time = document.getElementById('remain');  
+        var t = 6;  
+        function changeTime(){  
+            t--;  
+            remaining_time.innerHTML=" "+t+" ";  
+            if(t==0){  
+                    window.location.href = 'http://www.jquerycn.cn';  
+                    return;  
+            }  
+            setTimeout('changeTime()', 1000);  
+        }  
+        changeTime();  
+    </script>   -->
+ 
+ 
+ 
+ 
+ 
+ 
+</head>  
+     <body>
+ 
+ 
+ 
+ 
+ 
+ 
+     <div class="container">
+         <div class="page-header">
+             <h1>唇语识别训练数据采集<br>
+                 <small>请尽量保持头部位于划定区域内<br></small>
+                 <small>1) 点击开始录制，2) 在6秒时间内匀速读出一组数字  3) 提交视频  4) 重复前面步骤录制新一组数字<br></small> 
+                 <small>一共十组数字，谢谢您付出的时间！</small>
+ 
+ 
+             </h1>
+         </div>
+        
+        <div class="row"  align="middle">
+            <span id='random_nums' style="font-size:40px"> </span>
+        </div>
+ 
+ 
+         <div class="row" style="text-align: center;">
+              <span id='remain' style="font-size:40px" >-</span> 
+         </div>
+ 
+ 
+         <div class="row">
+             <div class="col-xs-2"></div>
+             <button  class="col-xs-2" id="btn_start" οnclick="getVideo()">开始录制</button>
+             <div class="col-xs-1"></div>
+ 
+ 
+ 
+ 
+             <div class="col-xs-2"></div>
+ 
+ 
+<!--              <button  class="col-xs-2" id="btn_end" οnclick="stopVideo()">结束录制</button>
+             <div class="col-xs-1"></div>  -->
+             <button  class="col-xs-2" id="submitt" οnclick="submitt()">提交视频</button>
+             <div class="col-xs-2"></div>
+         </div>
+ 
+ 
+ 
+ 
+         <div class="row">
+             <div class="col-xs-5">
+                 <div width="400" height="300" style="position:relative">
+                     <video id="video2" width="100%" height="300"></video>
+                     <!-- <div id = "triangle" class = "geom"></div>   -->
+ 
+ 
+                     <img id="img3" src="border.png" style="position:absolute;top:0;left:50%;width:50%;height:100%;transform: translate(-50%,0);">
+                 </div>
+             </div>
+ 
+ 
+ 
+ 
+ 
+ 
+             <div class="col-xs-5"></div>
+             <div id="video_check" col-xs-5>
+                 <video id="result_video" ></video>
+             </div>
+         </div>
+     </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     <div class="container">
+         <div class="page-header">
+             <h1>身份注册
+                 <small>请尽量保持头部位于划定区域内</small>
+             </h1>
+         </div>
+         <div class="row">
+             <div class="col-xs-5">
+                 <div width="400" height="300" style="position:relative">
+                     <video id="video" width="100%" height="300"></video>
+ 
+ 
+                     <img id="img2" src="border.png" style="position:absolute;top:0;left:50%;width:50%;height:100%;transform: translate(-50%,0);">
+                 </div>
+             </div>
+             <div class="col-xs-2">
+                     <button id='tack' class="col-xs-12">拍照</button>
+             </div>
+             <div class="col-xs-5">
+                 <div>
+                     <canvas id='canvas' width='400' height='300'></canvas>
+                 </div>
+             </div>
+         </div>
+         <hr>
+         <div class="row">
+             <div class="col-xs-3"></div>
+             <div class="input-group col-xs-6">
+                 <span class="input-group-addon">姓名</span>
+                 <input type="text" class="form-control" placeholder="请输入姓名" id="name">
+             </div>
+             <div class="col-xs-3"></div>
+         </div>
+         <div class="row">
+             <div class="col-xs-5"></div>
+             <button id="submit_p1" οnclick="ssss()" class="col-xs-2">提交</button>
+             <div class="col-xs-5"></div>
+         </div>
+ 
+ 
+     </div>
+     <hr>
+ 
+ 
+ 
+ 
+ 
+ 
+    <script type="text/javascript"> 
+ 
+ 
+        window.group_number = 0
+ 
+ 
+        window.digitsArray = 
+                [[0, 2, 8, 9], [2, 4, 3, 8], [4, 0, 9, 2], [9, 6, 0, 3], [6, 8, 3, 4],
+                [6, 2, 5, 0],  [8, 9, 3, 6], [5, 4, 6, 2], [3, 2, 0, 4], [8, 5, 9, 3]]
+ 
+ 
+        window.digits_str_array_view = 
+            [ '0  2  8  9', '2  4  3  8', '4  0  9  2', '9  6  0  3', '6  8  3  4',
+              '6  2  5  0', '8  9  3  6', '5  4  6  2', '3  2  0  4', '8  5  9  3'   ]
+ 
+ 
+        window.digits_str_array_shrank = 
+            [ '0289', '2438', '4092', '9603', '6834', '6250', '8936', '5462', '3204', '8593' ]
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+        function getRandomNumber_1_to_10(){
+            var rand_num_str = (Math.random() * 10).toFixed(0)
+            return rand_num_str;
+        }
+ 
+ 
+        function getNumsTextByNum_forView(num){
+            return  window.digits_str_array_view[num];
+        }
+ 
+ 
+        function getNumsTextByNum_Shrank(num){
+            return  window.digits_str_array_shrank[num];
+        }
+ 
+ 
+ 
+ 
+        var input_num = window.group_number  //getRandomNumber_1_to_10()
+        random_text_view = getNumsTextByNum_forView(input_num);
+        window.random_serial  = getNumsTextByNum_Shrank(input_num);
+        document.getElementById('random_nums').innerHTML = '第' + input_num + '组  :  ' + random_text_view;
+        // document.write(random_text.fontsize(30))
+    </script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     <script>
+         var video2 = document.getElementById('video2')
+         var video = document.getElementById('video'),
+                 canvas = document.getElementById('canvas'),
+                 snap = document.getElementById('tack'),
+                 img = document.getElementById('img'),
+                 vendorUrl = window.URL || window.webkitURL;
+ 
+ 
+         //媒体对象
+         navigator.getMedia = navigator.getUserMedia ||
+                 navigator.webkitGetUserMedia ||
+                 navigator.mozGetUserMedia ||
+                 navigator.msGetUserMedia;
+         navigator.getMedia({
+             video: true, //使用摄像头对象
+             audio: false  //不适用音频
+         }, function(strem){
+             console.log(strem);
+             video.src = vendorUrl.createObjectURL(strem);
+             video.play();
+             video2.src = vendorUrl.createObjectURL(strem);
+             video2.play();
+         }, function(error) {
+             //error.code
+             console.log(error);
+         });
+         snap.addEventListener('click', function(){
+ 
+ 
+             //绘制canvas图形
+             canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);
+ 
+ 
+             //把canvas图像转为img图片
+             //img.src = canvas.toDataURL("image/png");
+             console.log(canvas.toDataURL("image/png"));
+ 
+ 
+         })
+     </script>
+     <script type="text/javascript">
+ 
+ 
+ 
+ 
+ 
+ 
+         var MediaUtils = {
+             /**
+              * 获取用户媒体设备(处理兼容的问题)
+              * @param videoEnable {boolean} - 是否启用摄像头
+              * @param audioEnable {boolean} - 是否启用麦克风
+              * @param callback {Function} - 处理回调
+              */
+             getUserMedia: function (videoEnable, audioEnable, callback) {
+                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+                         || navigator.msGetUserMedia || window.getUserMedia;
+                 var constraints = {video: videoEnable, audio: audioEnable};
+                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                         callback(false, stream);
+                     })['catch'](function(err) {
+                         callback(err);
+                     });
+                 } else if (navigator.getUserMedia) {
+                     navigator.getUserMedia(constraints, function (stream) {
+                         callback(false, stream);
+                     }, function (err) {
+                         callback(err);
+                     });
+                 } else {
+                     callback(new Error('Not support userMedia'));
+                 }
+             },
+ 
+ 
+             /**
+              * 关闭媒体流
+              * @param stream {MediaStream} - 需要关闭的流
+              */
+             closeStream: function (stream) {
+                 if (typeof stream.stop === 'function') {
+                     stream.stop();
+                 }
+                 else {
+                     var  trackList = [stream.getAudioTracks(), stream.getVideoTracks()];
+ 
+ 
+                     for (var i = 0; i < trackList.length; i++) {
+                         var tracks = trackList[i];
+                         if (tracks && tracks.length > 0) {
+                             for (var j = 0; j < tracks.length; j++) {
+                                 var track = tracks[j];
+                                 if (typeof track.stop === 'function') {
+                                     track.stop();
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+         };
+ 
+ 
+ 
+ 
+ 
+ 
+         var recorder, mediaStream;
+ 
+ 
+         // 用于存放录制后的音频文件对象和录制结束回调
+         var recorderFile, stopRecordCallback;
+ 
+ 
+         // 用于存放是否开启了视频录制
+         var videoEnabled = false;
+ 
+ 
+         // 录制短语音
+         function startRecord(enableVideo) {
+             videoEnabled = enableVideo;
+             MediaUtils.getUserMedia(enableVideo, true, function (err, stream) {
+                 if (err) {
+                     throw err;
+                 } else {
+                     // 通过 MediaRecorder 记录获取到的媒体流
+                     recorder = new MediaRecorder(stream);
+                     console.log("创建"+recorder?"成功":"失败");
+                     mediaStream = stream;
+                     var chunks = [], startTime = 0;
+                     recorder.ondataavailable = function(e) {
+                         chunks.push(e.data);
+                     };
+                     recorder.onstop = function (e) {
+                         recorderFile = new Blob(chunks, { 'type' : recorder.mimeType });
+                         chunks = [];
+                         if (null != stopRecordCallback) {
+                             stopRecordCallback();
+                         }
+                     };
+                     recorder.start();
+                 }
+             });
+         }
+ 
+ 
+         // 停止录制
+         function stopRecord(callback) {
+             stopRecordCallback = callback;
+             // 终止录制器
+             recorder.stop();
+             // 关闭媒体流
+             MediaUtils.closeStream(mediaStream);
+         }
+ 
+ 
+         // 播放录制的音频
+         function playRecord() {
+             var url = URL.createObjectURL(recorderFile);
+             var dom = document.getElementById("result_video");
+             dom.autoplay = true;
+             dom.src = url;
+         }
+ 
+ 
+ 
+ 
+        function runCount(t){
+          if(t>0){
+            document.getElementById('remain').innerHTML = t;
+            t--;
+            setTimeout(function(){runCount(t);},1000);
+          }else{
+            document.getElementById("btn_start").disabled = true;
+            document.getElementById('remain').innerHTML = '0';
+            document.getElementById("submitt").disabled = false;
+            document.getElementById("remain").innerHTML = "录制完成，可以提交验证"
+          }
+        }
+ 
+ 
+ 
+ 
+ 
+ 
+         function getVideo(){
+ 
+ 
+            var second = 6
+            var milisecond = second * 1000
+            runCount( second);
+ 
+ 
+ 
+            document.getElementById("btn_start").disabled = true;
+            document.getElementById("submitt").disabled = true;
+ 
+ 
+            document.getElementById('btn_start').innerHTML = '六秒自动结束';
+ 
+ 
+ 
+             startRecord(true);
+             setTimeout(function(){
+             // 结束
+                 stopRecord(function() {
+             // 播放
+                    //alert(window.random_serial + "录制完成，可以提交验证");
+                     
+                     playRecord();
+                 });
+             }, milisecond);
+         };
+ 
+ 
+ 
+ 
+         function stopVideo(){
+             stopRecord(function() {
+                 // 播放
+                 alert("录制完成，可以提交验证");
+                 playRecord();
+             });
+         }
+ 
+ 
+ 
+ 
+ 
+ 
+         function submitt(){
+             var name = document.getElementById("name").value;
+             name = encodeURIComponent(name);
+ 
+ 
+             var random_serial_numbers = window.random_serial
+             random_serial_numbers = encodeURIComponent(name)
+ 
+ 
+             var data = new FormData();
+ 
+ 
+             data.append("image", recorderFile);
+ 
+ 
+             var req = new XMLHttpRequest();
+             req.onreadystatechange= function () {
+                 if(req.status==200 && req.readyState==4){
+                     console.log(req.responseText);
+                     //alert(req.responseText);
+                     if (window.group_number <= 8) {
+                         document.getElementById("remain").innerHTML = '提交成功, ' + '开始录制第' + window.group_number + '组';
+//                         alert('提交成功,  开始下一组');
+                         document.getElementById("btn_start").disabled = false;
+                         document.getElementById('btn_start').innerHTML = '开始录制第' + window.group_number + '组';
+ 
+ 
+                     }
+                     else{
+                        alert('提交成功,  所有10组录入完毕，刷新页面')
+ 
+ 
+                        window.history.go(0)
+                     }
+                 }
+             };
+             req.open("POST", "file_upload_batch_video_web2?name="+name+'&serial='+window.random_serial,true);
+             req.send(data);
+ 
+ 
+ 
+ 
+ 
+ 
+            window.group_number  += 1
+            var input_num = window.group_number  //getRandomNumber_1_to_10()
+            random_text_view = getNumsTextByNum_forView(input_num);
+            window.random_serial  = getNumsTextByNum_Shrank(input_num);
+            document.getElementById('random_nums').innerHTML = '第' + input_num + '组  :  ' + random_text_view;
+ 
+ 
+ 
+ 
+         };
+ 
+ 
+         var submit_p1 = document.getElementById("submit_p1");
+         function ssss(){
+             var name = document.getElementById("name").value;
+             name = encodeURIComponent(name);
+             console.log("出发");
+             var xhr = new XMLHttpRequest();
+             var fd = new FormData();
+ 
+ 
+             var data = canvas.toDataURL("image/png");
+             data=data.split(',')[1];
+             data=window.atob(data);
+             var ia = new Uint8Array(data.length);
+             for (var i = 0; i < data.length; i++) {
+                 ia[i] = data.charCodeAt(i);
+             }
+             console.log("出发2");
+             var blob=new Blob([ia],{type:"image/png",endings:'transparent'});
+             fd.append('image',blob,'image.png');
+             var httprequest=new XMLHttpRequest();
+             console.log("出发3");
+             httprequest.open('POST','file_upload_pic_name_web2?name='+name,true);
+             httprequest.send(fd);
+             httprequest.onreadystatechange= function () {
+                 if(httprequest.status==200 && httprequest.readyState==4){
+                     console.log(httprequest.responseText);
+                     if(httprequest.responseText==="end"){
+                         alert("验证标准提交成功");
+                     }
+                 }
+             };
+         };
+ 
+ 
+     </script>
+     </body>
+</html>  
