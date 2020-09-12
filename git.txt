@@ -22,6 +22,8 @@ git checkout master 	#切换回主分支
 git branch -d 分支名  	 #删除分支
 
 git remote add lsh	https://github.com/lshanhua/pub.git     #仓库起别名为lsh
+git remote add lsh git@github.com:Adlsh/pub.git                 #配置ssh连接
+	git push lsh master	#ssh提交免密
 
 git remote add XXX 仓库地址   #仓库别名
 git push -u XXX 分支名        #推送分支到仓库
