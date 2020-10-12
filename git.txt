@@ -33,3 +33,5 @@ git clone **** #克隆仓库
 git pull #同步到本地
 
 git@github.com:Adlsh/publice.git
+
+git push git@github.com:Adlsh/publice.git  #推送同步到github
