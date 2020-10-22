@@ -1,0 +1,47 @@
+部署好yum源和python环境
+rm -f /etc/yum.repos.d/*; curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum makecache fast;yum -y install python3
+
+搭建pip的阿里云加速
+yum -y install python3;yum -y install python-pip
+
+3.  新建源目录
+mkdir /root/.pip
+
+4.生成pip源文件
+cat > /root/.pip/pip.conf << EOF
+[global]
+timeout = 6000
+index-url = https://mirrors.aliyun.com/pypi/simple/
+trusted-host = mirrors.aliyun.com
+EOF
+
+安装salt环境
+pip3 install salt salt-ssh
+
+创建好salt的配置文件目录
+[root@www ~]# mkdir -p /etc/salt /srv/salt
+
+解压包到指定的位置
+[root@www ~]# tar xf salt-server-env.tar.gz -C /srv/salt/
+[root@www ~]# cd /srv/salt/
+[root@www salt]# ls
+base  master  roster
+[root@www salt]# cp master roster /etc/salt/
+
+填写好对应的机器信息
+[root@www salt]# vim roster
+server1:
+  host: ***
+  port: 22
+  user: root
+  passwd: ***
+  
+测试连通性
+salt-ssh '*' test.ping -i 
+
+开始执行任务
+[root@www init]# salt-ssh '*' state.highstate
+
+执行完毕后服务器执行
+reboot
