@@ -522,11 +522,7 @@ func(1,2,3)
 
 ## 第六章	 模块
 
-### **1、什么是模块？**
-
-![img](https://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif)
-
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+### 1、什么是模块？
 
 ```
 大家之前在编写ATM作业时，思路是先将程序中都需要有哪些功能定义出来，然后在需要用的地方调用即可。
