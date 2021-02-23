@@ -656,55 +656,869 @@ Packages are a way of structuring Python’s module namespace by using “dotted
 7 print(time.gmtime())    #UTC时区的struct_time
 ```
 
+datetime
+
+```
+import datetime
+
+# print(datetime.datetime.now()) #返回 2016-08-19 12:47:03.941925
+#print(datetime.date.fromtimestamp(time.time()) )  # 时间戳直接转成日期格式 2016-08-19
+# print(datetime.datetime.now() )
+# print(datetime.datetime.now() + datetime.timedelta(3)) #当前时间+3天
+# print(datetime.datetime.now() + datetime.timedelta(-3)) #当前时间-3天
+# print(datetime.datetime.now() + datetime.timedelta(hours=3)) #当前时间+3小时
+# print(datetime.datetime.now() + datetime.timedelta(minutes=30)) #当前时间+30分
+
+
+#
+# c_time  = datetime.datetime.now()
+# print(c_time.replace(minute=3,hour=2)) #时间替换
+```
+
+#### 2，random
+
+```
+ 1 import random
+ 2  
+ 3 print(random.random())#(0,1)----float    大于0且小于1之间的小数
+ 4  
+ 5 print(random.randint(1,3))  #[1,3]    大于等于1且小于等于3之间的整数
+ 6  
+ 7 print(random.randrange(1,3)) #[1,3)    大于等于1且小于3之间的整数
+ 8  
+ 9 print(random.choice([1,'23',[4,5]]))#1或者23或者[4,5]
+10  
+11 print(random.sample([1,'23',[4,5]],2))#列表元素任意2个组合
+12  
+13 print(random.uniform(1,3))#大于1小于3的小数，如1.927109612082716 
+14  
+15  
+16 item=[1,3,5,7,9]
+17 random.shuffle(item) #打乱item的顺序,相当于"洗牌"
+18 print(item)
+```
+
+#### 3，os
+
+```
+os.getcwd() 获取当前工作目录，即当前python脚本工作的目录路径
+os.chdir("dirname")  改变当前脚本工作目录；相当于shell下cd
+os.curdir  返回当前目录: ('.')
+os.pardir  获取当前目录的父目录字符串名：('..')
+os.makedirs('dirname1/dirname2')    可生成多层递归目录
+os.removedirs('dirname1')    若目录为空，则删除，并递归到上一级目录，如若也为空，则删除，依此类推
+os.mkdir('dirname')    生成单级目录；相当于shell中mkdir dirname
+os.rmdir('dirname')    删除单级空目录，若目录不为空则无法删除，报错；相当于shell中rmdir dirname
+os.listdir('dirname')    列出指定目录下的所有文件和子目录，包括隐藏文件，并以列表方式打印
+os.remove()  删除一个文件
+os.rename("oldname","newname")  重命名文件/目录
+os.stat('path/filename')  获取文件/目录信息
+os.sep    输出操作系统特定的路径分隔符，win下为"\\",Linux下为"/"
+os.linesep    输出当前平台使用的行终止符，win下为"\t\n",Linux下为"\n"
+os.pathsep    输出用于分割文件路径的字符串 win下为;,Linux下为:
+os.name    输出字符串指示当前使用平台。win->'nt'; Linux->'posix'
+os.system("bash command")  运行shell命令，直接显示
+os.environ  获取系统环境变量
+os.path.abspath(path)  返回path规范化的绝对路径
+os.path.split(path)  将path分割成目录和文件名二元组返回
+os.path.dirname(path)  返回path的目录。其实就是os.path.split(path)的第一个元素
+os.path.basename(path)  返回path最后的文件名。如何path以／或\结尾，那么就会返回空值。即os.path.split(path)的第二个元素
+os.path.exists(path)  如果path存在，返回True；如果path不存在，返回False
+os.path.isabs(path)  如果path是绝对路径，返回True
+os.path.isfile(path)  如果path是一个存在的文件，返回True。否则返回False
+os.path.isdir(path)  如果path是一个存在的目录，则返回True。否则返回False
+os.path.join(path1[, path2[, ...]])  将多个路径组合后返回，第一个绝对路径之前的参数将被忽略
+os.path.getatime(path)  返回path所指向的文件或者目录的最后存取时间
+os.path.getmtime(path)  返回path所指向的文件或者目录的最后修改时间
+os.path.getsize(path) 返回path的大小
+```
+
+#### 4，sys
+
+```
+1 sys.argv           命令行参数List，第一个元素是程序本身路径
+2 sys.exit(n)        退出程序，正常退出时exit(0)
+3 sys.version        获取Python解释程序的版本信息
+4 sys.maxint         最大的Int值
+5 sys.path           返回模块的搜索路径，初始化时使用PYTHONPATH环境变量的值
+6 sys.platform       返回操作系统平台名称
+```
+
+5，shutil
+
+高级的 文件、文件夹、压缩包 处理模块
+
+**shutil.copyfileobj(fsrc, fdst[, length])**
+将文件内容拷贝到另一个文件中
+
+```
+1 import shutil
+2  
+3 shutil.copyfileobj(open('old.xml','r'), open('new.xml', 'w'))
+```
+
+ 
+
+**shutil.copyfile(src, dst)**
+拷贝文件
+
+```
+1 shutil.copyfile('f1.log', 'f2.log') #目标文件无需存在
+```
+
+ 
+
+**shutil.copymode(src, dst)**
+仅拷贝权限。内容、组、用户均不变
+
+```
+1 shutil.copymode('f1.log', 'f2.log') #目标文件必须存在
+```
+
+ 
+
+**shutil.copystat(src, dst)**
+仅拷贝状态的信息，包括：mode bits, atime, mtime, flags
+
+```
+1 shutil.copystat('f1.log', 'f2.log') #目标文件必须存在
+```
+
+ 
+
+**shutil.copy(src, dst)**
+拷贝文件和权限
+
+```
+1 import shutil
+2  
+3 shutil.copy('f1.log', 'f2.log')
+```
+
+ 
+
+**shutil.copy2(src, dst)**
+拷贝文件和状态信息
+
+```
+1 import shutil
+2  
+3 shutil.copy2('f1.log', 'f2.log')
+```
+
+ 
+
+**shutil.ignore_patterns(\*patterns)**
+**shutil.copytree(src, dst, symlinks=False, ignore=None)**
+递归的去拷贝文件夹
+
+```
+1 import shutil
+2  
+3 shutil.copytree('folder1', 'folder2', ignore=shutil.ignore_patterns('*.pyc', 'tmp*')) #目标目录不能存在，注意对folder2目录父级目录要有可写权限，ignore的意思是排除 
+```
+
+![img](https://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif) 拷贝软连接
+
+ 
+
+**shutil.rmtree(path[, ignore_errors[, onerror]])**
+递归的去删除文件
+
+```
+1 import shutil
+2  
+3 shutil.rmtree('folder1')
+```
+
+ 
+
+**shutil.move(src, dst)**
+递归的去移动文件，它类似mv命令，其实就是重命名。
+
+```
+1 import shutil
+2  
+3 shutil.move('folder1', 'folder3')
+```
+
+ 
+
+**shutil.make_archive(base_name, format,...)**
+
+创建压缩包并返回文件路径，例如：zip、tar
+
+创建压缩包并返回文件路径，例如：zip、tar
+
+- base_name： 压缩包的文件名，也可以是压缩包的路径。只是文件名时，则保存至当前目录，否则保存至指定路径，
+  如 data_bak            =>保存至当前路径
+  如：/tmp/data_bak =>保存至/tmp/
+- format：	压缩包种类，“zip”, “tar”, “bztar”，“gztar”
+- root_dir：	要压缩的文件夹路径（默认当前目录）
+- owner：	用户，默认当前用户
+- group：	组，默认当前组
+- logger：	用于记录日志，通常是logging.Logger对象
+
+```
+1 #将 /data 下的文件打包放置当前程序目录
+2 import shutil
+3 ret = shutil.make_archive("data_bak", 'gztar', root_dir='/data')
+4   
+5   
+6 #将 /data下的文件打包放置 /tmp/目录
+7 import shutil
+8 ret = shutil.make_archive("/tmp/data_bak", 'gztar', root_dir='/data') 
+```
+
+shutil 对压缩包的处理是调用 ZipFile 和 TarFile 两个模块来进行的，详细：
+
+```
+import zipfile
+
+# 压缩
+z = zipfile.ZipFile('laxi.zip', 'w')
+z.write('a.log')
+z.write('data.data')
+z.close()
+
+# 解压
+z = zipfile.ZipFile('laxi.zip', 'r')
+z.extractall(path='.')
+z.close()
+```
+
+
+
+```
+import tarfile
+
+# 压缩
+>>> t=tarfile.open('/tmp/egon.tar','w')
+>>> t.add('/test1/a.py',arcname='a.bak')
+>>> t.add('/test1/b.py',arcname='b.bak')
+>>> t.close()
+
+
+# 解压
+>>> t=tarfile.open('/tmp/egon.tar','r')
+>>> t.extractall('/egon')
+>>> t.close()
+```
+
+#### 6，json&pickle模块
+
+用eval内置方法可以将一个字符串转成python对象
+
+**什么是序列化？**
+
+我们把对象(变量)从内存中变成可存储或传输的过程称之为序列化，在Python中叫pickling，在其他语言中也被称之为serialization，marshalling，flattening等等，都是一个意思。
+
+**为什么要序列化？**
+
+1：持久保存状态
+
+需知一个软件/程序的执行就在处理一系列状态的变化，在编程语言中，'状态'会以各种各样有结构的数据类型(也可简单的理解为变量)的形式被保存在内存中。
+
+内存是无法永久保存数据的，当程序运行了一段时间，我们断电或者重启程序，内存中关于这个程序的之前一段时间的数据（有结构）都被清空了。
+
+在断电或重启程序之前将程序当前内存中所有的数据都保存下来（保存到文件中），以便于下次程序执行能够从文件中载入之前的数据，然后继续执行，这就是序列化。
+
+具体的来说，你玩使命召唤闯到了第13关，你保存游戏状态，关机走人，下次再玩，还能从上次的位置开始继续闯关。或如，虚拟机状态的挂起等。
+
+2：跨平台数据交互
+
+序列化之后，不仅可以把序列化后的内容写入磁盘，还可以通过网络传输到别的机器上，如果收发的双方约定好实用一种序列化的格式，那么便打破了平台/语言差异化带来的限制，实现了跨平台数据交互。
+
+反过来，把变量内容从序列化的对象重新读到内存里称之为反序列化，即unpickling。
+
+
+
+#### 7，logging
+
+**一 日志级别**
+
+```
+CRITICAL = 50 #FATAL = CRITICAL
+ERROR = 40
+WARNING = 30 #WARN = WARNING
+INFO = 20
+DEBUG = 10
+NOTSET = 0 #不设置
+```
+
+二 默认级别为warning，默认打印到终端
+
+```
+import logging
+
+logging.debug('调试debug')
+logging.info('消息info')
+logging.warning('警告warn')
+logging.error('错误error')
+logging.critical('严重critical')
+
+'''
+WARNING:root:警告warn
+ERROR:root:错误error
+CRITICAL:root:严重critical
+'''
+```
+
+三 为logging模块指定全局配置，针对所有logger有效，控制打印到文件中
+
+```
+可在logging.basicConfig()函数中通过具体参数来更改logging模块默认行为，可用参数有
+filename：用指定的文件名创建FiledHandler（后边会具体讲解handler的概念），这样日志会被存储在指定的文件中。
+filemode：文件打开方式，在指定了filename时使用这个参数，默认值为“a”还可指定为“w”。
+format：指定handler使用的日志显示格式。 
+datefmt：指定日期时间格式。 
+level：设置rootlogger（后边会讲解具体概念）的日志级别 
+stream：用指定的stream创建StreamHandler。可以指定输出到sys.stderr,sys.stdout或者文件，默认为sys.stderr。若同时列出了filename和stream两个参数，则stream参数会被忽略。
+
+
+
+#格式
+%(name)s：Logger的名字，并非用户名，详细查看
+
+%(levelno)s：数字形式的日志级别
+
+%(levelname)s：文本形式的日志级别
+
+%(pathname)s：调用日志输出函数的模块的完整路径名，可能没有
+
+%(filename)s：调用日志输出函数的模块的文件名
+
+%(module)s：调用日志输出函数的模块名
+
+%(funcName)s：调用日志输出函数的函数名
+
+%(lineno)d：调用日志输出函数的语句所在的代码行
+
+%(created)f：当前时间，用UNIX标准的表示时间的浮 点数表示
+
+%(relativeCreated)d：输出日志信息时的，自Logger创建以 来的毫秒数
+
+%(asctime)s：字符串形式的当前时间。默认格式是 “2003-07-08 16:49:45,896”。逗号后面的是毫秒
+
+%(thread)d：线程ID。可能没有
+
+%(threadName)s：线程名。可能没有
+
+%(process)d：进程ID。可能没有
+
+%(message)s：用户输出的消息
+
+ 
+```
+
+```
+#======介绍
+可在logging.basicConfig()函数中可通过具体参数来更改logging模块默认行为，可用参数有
+filename：用指定的文件名创建FiledHandler（后边会具体讲解handler的概念），这样日志会被存储在指定的文件中。
+filemode：文件打开方式，在指定了filename时使用这个参数，默认值为“a”还可指定为“w”。
+format：指定handler使用的日志显示格式。
+datefmt：指定日期时间格式。
+level：设置rootlogger（后边会讲解具体概念）的日志级别
+stream：用指定的stream创建StreamHandler。可以指定输出到sys.stderr,sys.stdout或者文件，默认为sys.stderr。若同时列出了filename和stream两个参数，则stream参数会被忽略。
+
+
+format参数中可能用到的格式化串：
+%(name)s Logger的名字
+%(levelno)s 数字形式的日志级别
+%(levelname)s 文本形式的日志级别
+%(pathname)s 调用日志输出函数的模块的完整路径名，可能没有
+%(filename)s 调用日志输出函数的模块的文件名
+%(module)s 调用日志输出函数的模块名
+%(funcName)s 调用日志输出函数的函数名
+%(lineno)d 调用日志输出函数的语句所在的代码行
+%(created)f 当前时间，用UNIX标准的表示时间的浮 点数表示
+%(relativeCreated)d 输出日志信息时的，自Logger创建以 来的毫秒数
+%(asctime)s 字符串形式的当前时间。默认格式是 “2003-07-08 16:49:45,896”。逗号后面的是毫秒
+%(thread)d 线程ID。可能没有
+%(threadName)s 线程名。可能没有
+%(process)d 进程ID。可能没有
+%(message)s用户输出的消息
+
+#========使用
+import logging
+logging.basicConfig(filename='access.log',
+                    format='%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S %p',
+                    level=10)
+
+logging.debug('调试debug')
+logging.info('消息info')
+logging.warning('警告warn')
+logging.error('错误error')
+logging.critical('严重critical')
 
 
 
 
 
+#========结果
+access.log内容:
+2017-07-28 20:32:17 PM - root - DEBUG -test:  调试debug
+2017-07-28 20:32:17 PM - root - INFO -test:  消息info
+2017-07-28 20:32:17 PM - root - WARNING -test:  警告warn
+2017-07-28 20:32:17 PM - root - ERROR -test:  错误error
+2017-07-28 20:32:17 PM - root - CRITICAL -test:  严重critical
+
+part2: 可以为logging模块指定模块级的配置,即所有logger的配置
+```
+
+四 logging模块的Formatter，Handler，Logger，Filter对象
+
+```
+#logger：产生日志的对象
+
+#Filter：过滤日志的对象
+
+#Handler：接收日志然后控制打印到不同的地方，FileHandler用来打印到文件中，StreamHandler用来打印到终端
+
+#Formatter对象：可以定制不同的日志格式对象，然后绑定给不同的Handler对象使用，以此来控制不同的Handler的日志格式
+```
+
+```
+import logging
+
+#1、logger对象：负责产生日志，然后交给Filter过滤，然后交给不同的Handler输出
+logger=logging.getLogger(__file__)
+
+#2、Filter对象：不常用，略
+
+#3、Handler对象：接收logger传来的日志，然后控制输出
+h1=logging.FileHandler('t1.log') #打印到文件
+h2=logging.FileHandler('t2.log') #打印到文件
+h3=logging.StreamHandler() #打印到终端
+
+#4、Formatter对象：日志格式
+formmater1=logging.Formatter('%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S %p',)
+
+formmater2=logging.Formatter('%(asctime)s :  %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S %p',)
+
+formmater3=logging.Formatter('%(name)s %(message)s',)
+
+
+#5、为Handler对象绑定格式
+h1.setFormatter(formmater1)
+h2.setFormatter(formmater2)
+h3.setFormatter(formmater3)
+
+#6、将Handler添加给logger并设置日志级别
+logger.addHandler(h1)
+logger.addHandler(h2)
+logger.addHandler(h3)
+logger.setLevel(10)
+
+#7、测试
+logger.debug('debug')
+logger.info('info')
+logger.warning('warning')
+logger.error('error')
+logger.critical('critical')
+```
+
+五 Logger与Handler的级别
+
+**logger是第一级过滤，然后才能到handler，我们可以给logger和handler同时设置level，但是需要注意的是**
+
+```
+Logger is also the first to filter the message based on a level — if you set the logger to INFO, and all handlers to DEBUG, you still won't receive DEBUG messages on handlers — they'll be rejected by the logger itself. If you set logger to DEBUG, but all handlers to INFO, you won't receive any DEBUG messages either — because while the logger says "ok, process this", the handlers reject it (DEBUG < INFO).
 
 
 
+#验证
+import logging
 
 
+form=logging.Formatter('%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S %p',)
+
+ch=logging.StreamHandler()
+
+ch.setFormatter(form)
+# ch.setLevel(10)
+ch.setLevel(20)
+
+l1=logging.getLogger('root')
+# l1.setLevel(20)
+l1.setLevel(10)
+l1.addHandler(ch)
+
+l1.debug('l1 debug')
+```
+
+**==========================直奔主题版============================**
+
+1、日志级别与配置
+
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
+```
+import logging
+
+# 一：日志配置
+logging.basicConfig(
+    # 1、日志输出位置：1、终端 2、文件
+    # filename='access.log', # 不指定，默认打印到终端
+
+    # 2、日志格式
+    format='%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+
+    # 3、时间格式
+    datefmt='%Y-%m-%d %H:%M:%S %p',
+
+    # 4、日志级别
+    # critical => 50
+    # error => 40
+    # warning => 30
+    # info => 20
+    # debug => 10
+    level=30,
+)
+
+# 二：输出日志
+logging.debug('调试debug')
+logging.info('消息info')
+logging.warning('警告warn')
+logging.error('错误error')
+logging.critical('严重critical')
+
+'''
+# 注意下面的root是默认的日志名字
+WARNING:root:警告warn
+ERROR:root:错误error
+CRITICAL:root:严重critical
+'''
+```
+
+2、日志配置字典
+
+```
+"""
+logging配置
+"""
+
+import os
+
+# 1、定义三种日志输出格式，日志中可能用到的格式化串如下
+# %(name)s Logger的名字
+# %(levelno)s 数字形式的日志级别
+# %(levelname)s 文本形式的日志级别
+# %(pathname)s 调用日志输出函数的模块的完整路径名，可能没有
+# %(filename)s 调用日志输出函数的模块的文件名
+# %(module)s 调用日志输出函数的模块名
+# %(funcName)s 调用日志输出函数的函数名
+# %(lineno)d 调用日志输出函数的语句所在的代码行
+# %(created)f 当前时间，用UNIX标准的表示时间的浮 点数表示
+# %(relativeCreated)d 输出日志信息时的，自Logger创建以 来的毫秒数
+# %(asctime)s 字符串形式的当前时间。默认格式是 “2003-07-08 16:49:45,896”。逗号后面的是毫秒
+# %(thread)d 线程ID。可能没有
+# %(threadName)s 线程名。可能没有
+# %(process)d 进程ID。可能没有
+# %(message)s用户输出的消息
+
+# 2、强调：其中的%(name)s为getlogger时指定的名字
+standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
+                  '[%(levelname)s][%(message)s]'
+
+simple_format = '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
+
+test_format = '%(asctime)s] %(message)s'
+
+# 3、日志配置字典
+LOGGING_DIC = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': standard_format
+        },
+        'simple': {
+            'format': simple_format
+        },
+        'test': {
+            'format': test_format
+        },
+    },
+    'filters': {},
+    'handlers': {
+        #打印到终端的日志
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',  # 打印到屏幕
+            'formatter': 'simple'
+        },
+        #打印到文件的日志,收集info及以上的日志
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件,日志轮转
+            'formatter': 'standard',
+            # 可以定制日志文件路径
+            # BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # log文件的目录
+            # LOG_PATH = os.path.join(BASE_DIR,'a1.log')
+            'filename': 'a1.log',  # 日志文件
+            'maxBytes': 1024*1024*5,  # 日志大小 5M
+            'backupCount': 5,
+            'encoding': 'utf-8',  # 日志文件的编码，再也不用担心中文log乱码了
+        },
+        'other': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',  # 保存到文件
+            'formatter': 'test',
+            'filename': 'a2.log',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        #logging.getLogger(__name__)拿到的logger配置
+        '': {
+            'handlers': ['default', 'console'],  # 这里把上面定义的两个handler都加上，即log数据既写入文件又打印到屏幕
+            'level': 'DEBUG', # loggers(第一层日志级别关限制)--->handlers(第二层日志级别关卡限制)
+            'propagate': False,  # 默认为True，向上（更高level的logger）传递，通常设置为False即可，否则会一份日志向上层层传递
+        },
+        '专门的采集': {
+            'handlers': ['other',],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+```
+
+3、使用
+
+```
+import settings
+
+# !!!强调!!!
+# 1、logging是一个包，需要使用其下的config、getLogger，可以如下导入
+# from logging import config
+# from logging import getLogger
+
+# 2、也可以使用如下导入
+import logging.config # 这样连同logging.getLogger都一起导入了,然后使用前缀logging.config.
+
+# 3、加载配置
+logging.config.dictConfig(settings.LOGGING_DIC)
+
+# 4、输出日志
+logger1=logging.getLogger('用户交易')
+logger1.info('egon儿子alex转账3亿冥币')
+
+# logger2=logging.getLogger('专门的采集') # 名字传入的必须是'专门的采集'，与LOGGING_DIC中的配置唯一对应
+# logger2.debug('专门采集的日志')
+```
+
+#### 8，re
+
+一：什么是正则？
+
+　正则就是用一些具有特殊含义的符号组合到一起（称为正则表达式）来描述字符或者字符串的方法。或者说：正则就是用来描述一类事物的规则。（在Python中）它内嵌在Python中，并通过 re 模块实现。正则表达式模式被编译成一系列的字节码，然后由用 C 编写的匹配引擎执行。
+
+二：常用匹配模式(元字符)
+
+| 字符     | 说明                                                         | Basic RegEx            | Extended RegEx | python RegEx | Perl regEx                                           |
+| -------- | ------------------------------------------------------------ | ---------------------- | -------------- | ------------ | ---------------------------------------------------- |
+| 转义     |                                                              | \                      | \              | \            | \                                                    |
+| ^        | 匹配行首，例如'^dog'匹配以字符串dog开头的行（注意：awk 指令中，'^'则是匹配字符串的开始） | ^                      | ^              | ^            | ^                                                    |
+| $        | 匹配行尾，例如：'^、dog$'匹配以字符串 dog 为结尾的行（注意：awk 指令中，'$'则是匹配字符串的结尾） | $                      | $              | $            | $                                                    |
+| ^$       | 匹配空行                                                     | ^$                     | ^$             | ^$           | ^$                                                   |
+| ^string$ | 匹配行，例如：'^dog$'匹配只含一个字符串 dog 的行             | ^string$               | ^string$       | ^string$     | ^string$                                             |
+| \<       | 匹配单词，例如：'\<frog' （等价于'\bfrog'），匹配以 frog 开头的单词 | \<                     | \<             | **不支持**   | **不支持**（但可以使用\b来匹配单词，例如：'\bfrog'） |
+| \>       | 匹配单词，例如：'frog\>'（等价于'frog\b '），匹配以 frog 结尾的单词 | \>                     | \>             | **不支持**   | **不支持**（但可以使用\b来匹配单词，例如：'frog\b'） |
+| \<x\>    | 匹配一个单词或者一个特定字符，例如：'\<frog\>'（等价于'\bfrog\b'）、'\<G\>' | \<x\>                  | \<x\>          | **不支持**   | **不支持**（但可以使用\b来匹配单词，例如：'\bfrog\b' |
+| ()       | 匹配表达式，例如：不支持'（frog）'                           | **不支持**（但可以使用 |                |              |                                                      |
+
+|      | **不支持**（同())                                            | **不支持**（同()) | **不支持**（同()) |      |      |
+| ---- | ------------------------------------------------------------ | ----------------- | ----------------- | ---- | ---: |
+| ？   | 匹配前面的子表达式 0 次或 1 次（等价于{0,1}），例如：where(is)?能匹配"where" 以及"whereis" | **不支持**（同\?) | ？                | ？   |   ？ |
+| \?   | 匹配前面的子表达式 0 次或 1 次（等价于'\{0,1\}'），例如：'where*i**s* |                   |                   |      |      |
+
+| ”\?“ |                                 '能匹配 "where"以及"whereis" | **不支持**（同?) | **不支持**（同?)                                             | **不支持**（同?) |                                                            |
+| ---- | -----------------------------------------------------------: | ---------------- | ------------------------------------------------------------ | ---------------- | ---------------------------------------------------------- |
+| ?    | 当该字符紧跟在任何一个其他限制符（*, +, ?, {n},{n,}, {n,m}）  后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串  "oooo"，'o+?' 将匹配单个"o"，而 'o+' 将匹配所有 'o' | **不支持**       | **不支持**                                                   | **不支持**       | **不支持**                                                 |
+| .    | 匹配除换行符（'\n'）之外的任意单个字符（注意：awk 指令中的句点能匹配换行符） | .                | .（如果要匹配包括“\n”在内的任何一个字符，请使用：'(^$)\|（.） | .                | .（如果要匹配包括“\n”在内的任何一个字符，请使用：' [.\n] ' |
+| *    | 匹配前面的子表达式 0 次或多次（等价于{0, }），例如：zo* 能匹配 "z"以及 "zoo" | *                | *                                                            | *                | *                                                          |
+| \+   | 匹配前面的子表达式 1 次或多次（等价于'\{1, \}'），例如：'where*i**s* |                  |                                                              |                  |                                                            |
+
+| “\+ ”     | 匹配前面的子表达式 1 次或多次（等价于'\{1, \}'），例如：'where*i**s*\+ '能匹配 "whereis"以及"whereisis" | **不支持**（同+)       | **不支持**（同+) | **不支持**（同+) |           |
+| --------- | ------------------------------------------------------------ | ---------------------- | ---------------- | ---------------- | --------- |
+| +         | 匹配前面的子表达式 1 次或多次（等价于{1, }），例如：zo+能匹配 "zo"以及 "zoo"，但不能匹配 "z" | **不支持**（同\+)      | +                | +                | +         |
+| {n}       | n 必须是一个 0 或者正整数，匹配子表达式 n 次，例如：zo{2}能匹配 | **不支持**（同\{n\})   | {n}              | {n}              | {n}       |
+| {n,}      | "zooz"，但不能匹配 "Bob"n 必须是一个 0 或者正整数，匹配子表达式大于等于 n次，例如：go{2,} | **不支持**（同\{n,\})  | {n,}             | {n,}             | {n,}      |
+| {n,m}     | 能匹配 "good"，但不能匹配 godm 和 n 均为非负整数，其中 n <= m，最少匹配 n 次且最多匹配 m 次 ，例如：o{1,3}将配"fooooood" 中的前三个 o（请注意在逗号和两个数之间不能有空格） | **不支持**（同\{n,m\}) | {n,m}            | {n,m}            | {n,m}     |
+| x\|y      | 匹配 x 或 y，例如： 不支持'z\|（food）' 能匹配 "z" 或"food"；'（z\|f）ood' 则匹配"zood" 或 "food" | **不支持**（同x\|y)    | x\|y             | x\|y             | x\|y      |
+| [0-9]     | 匹配从 0 到 9 中的任意一个数字字符（注意：要写成递增）       | [0-9]                  | [0-9]            | [0-9]            | [0-9]     |
+| [xyz]     | 字符集合，匹配所包含的任意一个字符，例如：'[abc]'可以匹配"lay" 中的 'a'（注意：如果元字符，例如：. *等，它们被放在[ ]中，那么它们将变成一个普通字符） | [xyz]                  | [xyz]            | [xyz]            | [xyz]     |
+| [^xyz]    | 负值字符集合，匹配未包含的任意一个字符（注意：不包括换行符），例如：'[^abc]' 可以匹配 "Lay" 中的'L'（注意：[^xyz]在awk 指令中则是匹配未包含的任意一个字符+换行符） | [^xyz]                 | [^xyz]           | [^xyz]           | [^xyz]    |
+| [A-Za-z]  | 匹配大写字母或者小写字母中的任意一个字符（注意：要写成递增） | [A-Za-z]               | [A-Za-z]         | [A-Za-z]         | [A-Za-z]  |
+| [^A-Za-z] | 匹配除了大写与小写字母之外的任意一个字符（注意：写成递增）   | [^A-Za-z]              | [^A-Za-z]        | [^A-Za-z]        | [^A-Za-z] |
+| **\d**    | 匹配从 0 到 9 中的任意一个数字字符（等价于 [0-9]）           | **不支持**             | **不支持**       | \d               | \d        |
+| **\D**    | 匹配非数字字符（等价于 [^0-9]）                              | **不支持**             | **不支持**       | \D               | \D        |
+| \S        | 匹配任何非空白字符（等价于[^\f\n\r\t\v]）                    | **不支持**             | **不支持**       | \S               | \S        |
+| \s        | 匹配任何空白字符，包括空格、制表符、换页符等等（等价于[ \f\n\r\t\v]） | **不支持**             | **不支持**       | \s               | \s        |
+| \W        | 匹配任何非单词字符 (等价于[^A-Za-z0-9_])                     | \W                     | \W               | \W               | \W        |
+| \w        | 匹配包括下划线的任何单词字符（等价于[A-Za-z0-9_]）           | \w                     | \w               | \w               | \w        |
+| \B        | 匹配非单词边界，例如：'er\B' 能匹配 "verb" 中的'er'，但不能匹配"never" 中的'er' | \B                     | \B               | \B               | \B        |
+| \b        | 匹配一个单词边界，也就是指单词和空格间的位置，例如： 'er\b' 可以匹配"never" 中的 'er'，但不能匹配 "verb" 中的'er' | \b                     | \b               | \b               | \b        |
+| \t        | 匹配一个横向制表符（等价于 \x09和 \cI）                      | **不支持**             | **不支持**       | \t               | \t        |
+| \v        | 匹配一个垂直制表符（等价于 \x0b和 \cK）                      | **不支持**             | **不支持**       | \v               | \v        |
+| \n        | 匹配一个换行符（等价于 \x0a 和\cJ）                          | **不支持**             | **不支持**       | \n               | \n        |
+| \f        | 匹配一个换页符（等价于\x0c 和\cL）                           | **不支持**             | **不支持**       | \f               | \f        |
+| \r        | 匹配一个回车符（等价于 \x0d 和\cM）                          | **不支持**             | **不支持**       | \r               | \r        |
+| \\        | 匹配转义字符本身"\"                                          | \\                     | \\               | \\               | \\        |
+| \cx       | 匹配由 x 指明的控制字符，例如：\cM匹配一个Control-M 或回车符，x 的值必须为A-Z 或 a-z 之一，否则，将 c 视为一个原义的 'c' 字符 | **不支持**             | **不支持**       |                  | \cx       |
+| \xn       | 匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长，例如：'\x41' 匹配 "A"。'\x041' 则等价于'\x04' & "1"。正则表达式中可以使用 ASCII 编码 | **不支持**             | **不支持**       |                  | \xn       |
+| \num      | 匹配 num，其中 num是一个正整数。表示对所获取的匹配的引用     | **不支持**             | \num             | \num             |           |
+| [:alnum:] | 匹配任何一个字母或数字（[A-Za-z0-9]），例如：'[[:alnum:]] '  | [:alnum:]              | [:alnum:]        | [:alnum:]        | [:alnum:] |
+| [:alpha:] | 匹配任何一个字母（[A－Za－z]）， 例如：' [[:alpha:]] '       | [:alpha:]              | [:alpha:]        | [:alpha:]        | [:alpha:] |
+| [:digit:] | 匹配任何一个数字（[0-9]），例如：'[[:digit:]] '              | [:digit:]              | [:digit:]        | [:digit:]        | [:digit:] |
+| [:lower:] | 匹配任何一个小写字母（[a-z]）， 例如：' [[:lower:]] '        | [:lower:]              | [:lower:]        | [:lower:]        | [:lower:] |
+| [:upper:] | 匹配任何一个大写字母（[A-Z]）                                | [:upper:]              | [:upper:]        | [:upper:]        | [:upper:] |
+| [:space:] | 任何一个空白字符： 支持制表符、空格，例如：' [[:space:]] '   | [:space:]              | [:space:]        | [:space:]        | [:space:] |
+| [:blank:] | 空格和制表符（横向和纵向），例如：'[[:blank:]]'ó'[\s\t\v]'   | [:blank:]              | [:blank:]        | [:blank:]        | [:blank:] |
+| [:graph:] | 任何一个可以看得见的且可以打印的字符（注意：不包括空格和换行符等），例如：'[[:graph:]] ' | [:graph:]              | [:graph:]        | [:graph:]        | [:graph:] |
+| [:print:] | 任何一个可以打印的字符（注意：不包括：[:cntrl:]、字符串结束符'\0'、EOF 文件结束符（-1）， 但包括空格符号），例如：'[[:print:]] ' | [:print:]              | [:print:]        | [:print:]        | [:print:] |
+
+```
+# =================================匹配模式=================================
+#一对一的匹配
+# 'hello'.replace(old,new)
+# 'hello'.find('pattern')
+
+#正则匹配
+import re
+#\w与\W
+print(re.findall('\w','hello egon 123')) #['h', 'e', 'l', 'l', 'o', 'e', 'g', 'o', 'n', '1', '2', '3']
+print(re.findall('\W','hello egon 123')) #[' ', ' ']
+
+#\s与\S
+print(re.findall('\s','hello  egon  123')) #[' ', ' ', ' ', ' ']
+print(re.findall('\S','hello  egon  123')) #['h', 'e', 'l', 'l', 'o', 'e', 'g', 'o', 'n', '1', '2', '3']
+
+#\n \t都是空,都可以被\s匹配
+print(re.findall('\s','hello \n egon \t 123')) #[' ', '\n', ' ', ' ', '\t', ' ']
+
+#\n与\t
+print(re.findall(r'\n','hello egon \n123')) #['\n']
+print(re.findall(r'\t','hello egon\t123')) #['\n']
+
+#\d与\D
+print(re.findall('\d','hello egon 123')) #['1', '2', '3']
+print(re.findall('\D','hello egon 123')) #['h', 'e', 'l', 'l', 'o', ' ', 'e', 'g', 'o', 'n', ' ']
+
+#\A与\Z
+print(re.findall('\Ahe','hello egon 123')) #['he'],\A==>^
+print(re.findall('123\Z','hello egon 123')) #['he'],\Z==>$
+```
+
+^ 
+指定匹配必须出现在字符串的开头或行的开头。
+
+\A 
+指定匹配必须出现在字符串的开头（忽略 Multiline 选项）。
+
+$ 
+指定匹配必须出现在以下位置：字符串结尾、字符串结尾的 \n 之前或行的结尾。
+
+\Z 
+指定匹配必须出现在字符串的结尾或字符串结尾的 \n 之前（忽略 Multiline 选项）。
+
+```
+#^与$
+print(re.findall('^h','hello egon 123')) #['h']
+print(re.findall('3$','hello egon 123')) #['3']
+
+# 重复匹配：| . | * | ? | .* | .*? | + | {n,m} |
+#.
+print(re.findall('a.b','a1b')) #['a1b']
+print(re.findall('a.b','a1b a*b a b aaab')) #['a1b', 'a*b', 'a b', 'aab']
+print(re.findall('a.b','a\nb')) #[]
+print(re.findall('a.b','a\nb',re.S)) #['a\nb']
+print(re.findall('a.b','a\nb',re.DOTALL)) #['a\nb']同上一条意思一样
+
+#*
+print(re.findall('ab*','bbbbbbb')) #[]
+print(re.findall('ab*','a')) #['a']
+print(re.findall('ab*','abbbb')) #['abbbb']
+
+#?
+print(re.findall('ab?','a')) #['a']
+print(re.findall('ab?','abbb')) #['ab']
+#匹配所有包含小数在内的数字
+print(re.findall('\d+\.?\d*',"asdfasdf123as1.13dfa12adsf1asdf3")) #['123', '1.13', '12', '1', '3']
+
+#.*默认为贪婪匹配
+print(re.findall('a.*b','a1b22222222b')) #['a1b22222222b']
+
+#.*?为非贪婪匹配：推荐使用
+print(re.findall('a.*?b','a1b22222222b')) #['a1b']
+
+#+
+print(re.findall('ab+','a')) #[]
+print(re.findall('ab+','abbb')) #['abbb']
+
+#{n,m}
+print(re.findall('ab{2}','abbb')) #['abb']
+print(re.findall('ab{2,4}','abbb')) #['abb']
+print(re.findall('ab{1,}','abbb')) #'ab{1,}' ===> 'ab+'
+print(re.findall('ab{0,}','abbb')) #'ab{0,}' ===> 'ab*'
+
+#[]
+print(re.findall('a[1*-]b','a1b a*b a-b')) #[]内的都为普通字符了，且如果-没有被转意的话，应该放到[]的开头或结尾
+print(re.findall('a[^1*-]b','a1b a*b a-b a=b')) #[]内的^代表的意思是取反，所以结果为['a=b']
+print(re.findall('a[0-9]b','a1b a*b a-b a=b')) #[]内的^代表的意思是取反，所以结果为['a=b']
+print(re.findall('a[a-z]b','a1b a*b a-b a=b aeb')) #[]内的^代表的意思是取反，所以结果为['a=b']
+print(re.findall('a[a-zA-Z]b','a1b a*b a-b a=b aeb aEb')) #[]内的^代表的意思是取反，所以结果为['a=b']
+
+#\# print(re.findall('a\\c','a\c')) #对于正则来说a\\c确实可以匹配到a\c,但是在python解释器读取a\\c时，会发生转义，然后交给re去执行，所以抛出异常
+print(re.findall(r'a\\c','a\c')) #r代表告诉解释器使用rawstring，即原生字符串，把我们正则内的所有符号都当普通字符处理，不要转义
+print(re.findall('a\\\\c','a\c')) #同上面的意思一样，和上面的结果一样都是['a\\c']
+
+#():分组
+print(re.findall('ab+','ababab123')) #['ab', 'ab', 'ab']
+print(re.findall('(ab)+123','ababab123')) #['ab']，匹配到末尾的ab123中的ab
+print(re.findall('(?:ab)+123','ababab123')) #findall的结果不是匹配的全部内容，而是组内的内容,?:可以让结果为匹配的全部内容
+print(re.findall('href="(.*?)"','<a href="http://www.baidu.com">点击</a>'))#['http://www.baidu.com']
+print(re.findall('href="(?:.*?)"','<a href="http://www.baidu.com">点击</a>'))#['href="http://www.baidu.com"']
+
+#|
+print(re.findall('compan(?:y|ies)','Too many companies have gone bankrupt, and the next one is my company'))
+```
+
+```
+# ===========================re模块提供的方法介绍===========================
+import re
+#1
+print(re.findall('e','alex make love') )   #['e', 'e', 'e'],返回所有满足匹配条件的结果,放在列表里
+#2
+print(re.search('e','alex make love').group()) #e,只到找到第一个匹配然后返回一个包含匹配信息的对象,该对象可以通过调用group()方法得到匹配的字符串,如果字符串没有匹配，则返回None。
+
+#3
+print(re.match('e','alex make love'))    #None,同search,不过在字符串开始处进行匹配,完全可以用search+^代替match
+
+#4
+print(re.split('[ab]','abcd'))     #['', '', 'cd']，先按'a'分割得到''和'bcd',再对''和'bcd'分别按'b'分割
+
+#5
+print('===>',re.sub('a','A','alex make love')) #===> Alex mAke love，不指定n，默认替换所有
+print('===>',re.sub('a','A','alex make love',1)) #===> Alex make love
+print('===>',re.sub('a','A','alex make love',2)) #===> Alex mAke love
+print('===>',re.sub('^(\w+)(.*?\s)(\w+)(.*?\s)(\w+)(.*?)$',r'\5\2\3\4\1','alex make love')) #===> love make alex
+
+print('===>',re.subn('a','A','alex make love')) #===> ('Alex mAke love', 2),结果带有总共替换的个数
 
 
+#6
+obj=re.compile('\d{2}')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(obj.search('abc123eeee').group()) #12
+print(obj.findall('abc123eeee')) #['12'],重用了obj
+```
 
 
 
