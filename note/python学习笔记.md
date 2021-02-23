@@ -1524,6 +1524,341 @@ print(obj.findall('abc123eeee')) #['12'],重用了obj
 
 ## 第七章 	面向对象
 
+#### 7.1 什么是面向对象的程序
+
+面向过程的程序设计：核心是过程二字，过程指的是解决问题的步骤，即先干什么再干什么......面向过程的设计就好比精心设计好一条流水线，是一种机械式的思维方式。
+
+**优点是：复杂度的问题流程化，进而简单化（一个复杂的问题，分成一个个小的步骤去实现，实现小的步骤将会非常简单）**
+
+**缺点是：一套流水线或者流程就是用来解决一个问题，生产汽水的流水线无法生产汽车，即便是能，也得是大改，改一个组件，牵一发而动全身。**
+
+应用场景：一旦完成基本很少改变的场景，著名的例子有Linux內核，git，以及Apache HTTP Server等。
+
+
+
+面向对象的程序设计：核心是对象二字，（要理解对象为何物，必须把自己当成上帝，上帝眼里世间存在的万物皆为对象，不存在的也可以创造出来。面向对象的程序设计好比如来设计西游记，如来要解决的问题是把经书传给东土大唐，如来想了想解决这个问题需要四个人：唐僧，沙和尚，猪八戒，孙悟空，每个人都有各自的特征和技能（这就是对象的概念，特征和技能分别对应对象的数据属性和方法属性），然而这并不好玩，于是如来又安排了一群妖魔鬼怪，为了防止师徒四人在取经路上被搞死，又安排了一群神仙保驾护航，这些都是对象。然后取经开始，师徒四人与妖魔鬼怪神仙交互着直到最后取得真经。如来根本不会管师徒四人按照什么流程去取),对象是特征与技能的结合体，基于面向对象设计程序就好比在创造一个世界，你就是这个世界的上帝，存在的皆为对象，不存在的也可以创造出来，与面向过程机械式的思维方式形成鲜明对比，面向对象更加注重对现实世界的模拟，是一种“上帝式”的思维方式。
+
+优点是：解决了程序的扩展性。对某一个对象单独修改，会立刻反映到整个体系中，如对游戏中一个人物参数的特征和技能修改都很容易。
+
+缺点：
+
+\1. 编程的复杂度远高于面向过程，不了解面向对象而立即上手基于它设计程序，极容易出现过度设计的问题。一些扩展性要求低的场景使用面向对象会徒增编程难度，比如管理linux系统的shell脚本就不适合用面向对象去设计，面向过程反而更加适合。
+
+\2.  无法向面向过程的程序设计流水线式的可以很精准的预测问题的处理流程与结果，面向对象的程序一旦开始就由对象之间的交互解决问题，即便是上帝也无法准确地预测最终结果。于是我们经常看到对战类游戏，新增一个游戏人物，在对战的过程中极容易出现阴霸的技能，一刀砍死3个人，这种情况是无法准确预知的，只有对象之间交互才能准确地知道最终的结果。
+
+应用场景：需求经常变化的软件，一般需求的变化都集中在用户层，互联网应用，企业内部软件，游戏等都是面向对象的程序设计大显身手的好地方
+
+面向对象的程序设计并不是全部。对于一个软件质量来说，面向对象的程序设计只是用来解决扩展性。
+
+
+
+#### 7.2 类和对象
+
+类即类别、种类，是面向对象设计最重要的概念，对象是特征与技能的结合体，而类则是一系列对象相似的特征与技能的结合体
+
+那么问题来了，先有的一个个具体存在的对象（比如一个具体存在的人），还是先有的人类这个概念，这个问题需要分两种情况去看
+
+在现实世界中：先有对象，再有类 
+
+在程序中：务必保证先定义类，后产生对象
+
+```
+#在程序中，务必保证：先定义（类），后使用（产生对象）
+PS:
+  1. 在程序中特征用变量标识，技能用函数标识
+  2. 因而类中最常见的无非是：变量和函数的定义
+
+#程序中的类
+class OldboyStudent:
+    school='oldboy'
+    def learn(self):
+        print('is learning')
+        
+    def eat(self):
+        print('is eating')
+    
+    def sleep(self):
+        print('is sleeping')
+  
+
+
+#注意：
+  1.类中可以有任意python代码，这些代码在类定义阶段便会执行
+  2.因而会产生新的名称空间，用来存放类的变量名与函数名，可以通过OldboyStudent.__dict__查看
+  3.对于经典类来说我们可以通过该字典操作类名称空间的名字（新式类有限制），但python为我们提供专门的.语法
+  4.点是访问属性的语法，类中定义的名字，都是类的属性
+
+#程序中类的用法
+.:专门用来访问属性，本质操作的就是__dict__
+OldboyStudent.school #等于经典类的操作OldboyStudent.__dict__['school']
+OldboyStudent.school='Oldboy' #等于经典类的操作OldboyStudent.__dict__['school']='Oldboy'
+OldboyStudent.x=1 #等于经典类的操作OldboyStudent.__dict__['x']=1
+del OldboyStudent.x #等于经典类的操作OldboyStudent.__dict__.pop('x')
+
+
+#程序中的对象
+#调用类，或称为实例化，得到对象
+s1=OldboyStudent()
+s2=OldboyStudent()
+s3=OldboyStudent()
+
+#如此，s1、s2、s3都一样了，而这三者除了相似的属性之外还各种不同的属性，这就用到了__init__
+#注意：该方法是在对象产生之后才会执行，只用来为对象进行初始化操作，可以有任意代码，但一定不能有返回值
+class OldboyStudent:
+    ......
+    def __init__(self,name,age,sex):
+        self.name=name
+        self.age=age
+        self.sex=sex
+    ......
+
+
+s1=OldboyStudent('李坦克','男',18) #先调用类产生空对象s1，然后调用OldboyStudent.__init__(s1,'李坦克','男',18)
+s2=OldboyStudent('王大炮','女',38)
+s3=OldboyStudent('牛榴弹','男',78)
+
+
+#程序中对象的用法
+#执行__init__,s1.name='牛榴弹'，很明显也会产生对象的名称空间
+s2.__dict__
+{'name': '王大炮', 'age': '女', 'sex': 38}
+
+s2.name #s2.__dict__['name']
+s2.name='王三炮' #s2.__dict__['name']='王三炮'
+s2.course='python' #s2.__dict__['course']='python'
+del s2.course #s2.__dict__.pop('course')
+```
+
+！！！细说__init__方法！！！
+
+```
+#方式一、为对象初始化自己独有的特征
+class People:
+    country='China'
+    x=1
+    def run(self):
+        print('----->', self)
+
+# 实例化出三个空对象
+obj1=People()
+obj2=People()
+obj3=People()
+
+# 为对象定制自己独有的特征
+obj1.name='egon'
+obj1.age=18
+obj1.sex='male'
+
+obj2.name='lxx'
+obj2.age=38
+obj2.sex='female'
+
+obj3.name='alex'
+obj3.age=38
+obj3.sex='female'
+
+# print(obj1.__dict__)
+# print(obj2.__dict__)
+# print(obj3.__dict__)
+# print(People.__dict__)
+
+
+
+
+
+#方式二、为对象初始化自己独有的特征
+class People:
+    country='China'
+    x=1
+    def run(self):
+        print('----->', self)
+
+# 实例化出三个空对象
+obj1=People()
+obj2=People()
+obj3=People()
+
+# 为对象定制自己独有的特征
+def chu_shi_hua(obj, x, y, z): #obj=obj1,x='egon',y=18,z='male'
+    obj.name = x
+    obj.age = y
+    obj.sex = z
+
+chu_shi_hua(obj1,'egon',18,'male')
+chu_shi_hua(obj2,'lxx',38,'female')
+chu_shi_hua(obj3,'alex',38,'female')
+
+
+
+
+
+#方式三、为对象初始化自己独有的特征
+class People:
+    country='China'
+    x=1
+
+    def chu_shi_hua(obj, x, y, z): #obj=obj1,x='egon',y=18,z='male'
+        obj.name = x
+        obj.age = y
+        obj.sex = z
+
+    def run(self):
+        print('----->', self)
+
+
+obj1=People()
+# print(People.chu_shi_hua)
+People.chu_shi_hua(obj1,'egon',18,'male')
+
+obj2=People()
+People.chu_shi_hua(obj2,'lxx',38,'female')
+
+obj3=People()
+People.chu_shi_hua(obj3,'alex',38,'female')
+
+
+
+
+# 方式四、为对象初始化自己独有的特征
+class People:
+    country='China'
+    x=1
+
+    def __init__(obj, x, y, z): #obj=obj1,x='egon',y=18,z='male'
+        obj.name = x
+        obj.age = y
+        obj.sex = z
+
+    def run(self):
+        print('----->', self)
+
+obj1=People('egon',18,'male') #People.__init__(obj1,'egon',18,'male')
+obj2=People('lxx',38,'female') #People.__init__(obj2,'lxx',38,'female')
+obj3=People('alex',38,'female') #People.__init__(obj3,'alex',38,'female')
+
+
+# __init__方法
+# 强调：
+#   1、该方法内可以有任意的python代码
+#   2、一定不能有返回值
+class People:
+    country='China'
+    x=1
+
+    def __init__(obj, name, age, sex): #obj=obj1,x='egon',y=18,z='male'
+        # if type(name) is not str:
+        #     raise TypeError('名字必须是字符串类型')
+        obj.name = name
+        obj.age = age
+        obj.sex = sex
+
+
+    def run(self):
+        print('----->', self)
+
+
+# obj1=People('egon',18,'male')
+obj1=People(3537,18,'male')
+
+# print(obj1.run)
+# obj1.run() #People.run(obj1)
+# print(People.run)
+```
+
+**PS：**
+
+**1. 站的角度不同，定义出的类是截然不同的，详见面向对象实战之需求分析**
+
+2.现实中的类并不完全等于程序中的类，比如现实中的公司类，在程序中有时需要拆分成部门类，业务类......
+
+**3. 有时为了编程需求，程序中也可能会定义现实中不存在的类，比如策略类，现实中并不存在，但是在程序中却是一个很常见的类**
+
+
+
+#### 7.3  属性查找
+
+类有两种属性：数据属性和函数属性
+
+*1. 类的数据属性是所有对象共享的*
+
+*2. 类的函数属性是绑定给对象用的*
+
+在obj.name会先从obj自己的名称空间里找name，找不到则去类中找，类也找不到就找父类...最后都找不到就抛出异常  
+
+
+
+#### 7.4绑定到对象的方法的特殊之处
+
+```
+#改写
+class OldboyStudent:
+    school='oldboy'
+    def __init__(self,name,age,sex):
+        self.name=name
+        self.age=age
+        self.sex=sex
+    def learn(self):
+        print('%s is learning' %self.name) #新增self.name
+
+    def eat(self):
+        print('%s is eating' %self.name)
+
+    def sleep(self):
+        print('%s is sleeping' %self.name)
+
+
+s1=OldboyStudent('李坦克','男',18)
+s2=OldboyStudent('王大炮','女',38)
+s3=OldboyStudent('牛榴弹','男',78)
+```
+
+类中定义的函数（没有被任何装饰器装饰的）是类的函数属性，类可以使用，但必须遵循函数的参数规则，有几个参数需要传几个参数
+
+类中定义的函数（没有被任何装饰器装饰的）,其实主要是给对象使用的，而且是绑定到对象的，虽然所有对象指向的都是相同的功能，但是绑定到不同的对象就是不同的绑定方法
+
+强调：绑定到对象的方法的特殊之处在于，绑定给谁就由谁来调用，谁来调用，就会将‘谁’本身当做第一个参数传给方法，即自动传值（方法__init__也是一样的道理）
+
+注意：绑定到对象的方法的这种自动传值的特征，决定了在类中定义的函数都要默认写一个参数self，self可以是任意名字，但是约定俗成地写出self。
+
+
+
+#### 7.5 封装
+
+从封装本身的意思去理解，封装就好像是拿来一个麻袋，把小猫，小狗，小王八，还有alex一起装进麻袋，然后把麻袋封上口子。照这种逻辑看，封装=‘隐藏’，这种理解是相当片面的
+
+**封装的真谛在于明确地区分内外，封装的属性可以直接在内部使用，而不能被外部直接使用，然而定义属性的目的终归是要用，外部要想用类隐藏的属性，需要我们为其开辟接口，让外部能够间接地用到我们隐藏起来的属性，那这么做的意义何在？？？**
+
+1：封装数据：将数据隐藏起来这不是目的。隐藏起来然后对外提供操作该数据的接口，然后我们可以在接口附加上对该数据操作的限制，以此完成对数据属性操作的严格控制。
+
+```
+class Teacher:
+    def __init__(self,name,age):
+        # self.__name=name
+        # self.__age=age
+        self.set_info(name,age)
+
+    def tell_info(self):
+        print('姓名:%s,年龄:%s' %(self.__name,self.__age))
+    def set_info(self,name,age):
+        if not isinstance(name,str):
+            raise TypeError('姓名必须是字符串类型')
+        if not isinstance(age,int):
+            raise TypeError('年龄必须是整型')
+        self.__name=name
+        self.__age=age
+
+
+t=Teacher('egon',18)
+t.tell_info()
+
+t.set_info('egon',19)
+t.tell_info()
+```
+
+2：封装方法：目的是隔离复杂度
+
+
+
 ## 第八章 	网络编程
 
 ## 第九章 	并发编程
