@@ -1857,17 +1857,79 @@ t.tell_info()
 
 2：封装方法：目的是隔离复杂度
 
+#### 7.6 异常处理
+
+### 一 什么是异常
+
+异常就是程序运行时发生错误的信号（在程序出现错误时，则会产生一个异常，若程序没有处理它，则会抛出该异常，程序的运行也随之终止），在python中,错误触发的异常如下
+
+![img](https://images2015.cnblogs.com/blog/1036857/201612/1036857-20161229161413726-1899748713.png) 
+
+### 二 异常的种类
+
+在python中不同的异常可以用不同的类型（python中统一了类与类型，类型即类）去标识，一个异常标识一种错误
+
+```
+AttributeError 试图访问一个对象没有的树形，比如foo.x，但是foo没有属性x
+IOError 输入/输出异常；基本上是无法打开文件
+ImportError 无法引入模块或包；基本上是路径问题或名称错误
+IndentationError 语法错误（的子类） ；代码没有正确对齐
+IndexError 下标索引超出序列边界，比如当x只有三个元素，却试图访问x[5]
+KeyError 试图访问字典里不存在的键
+KeyboardInterrupt Ctrl+C被按下
+NameError 使用一个还未被赋予对象的变量
+SyntaxError Python代码非法，代码不能编译(个人认为这是语法错误，写错了）
+TypeError 传入对象类型与要求的不符合
+UnboundLocalError 试图访问一个还未被设置的局部变量，基本上是由于另有一个同名的全局变量，
+导致你以为正在访问它
+ValueError 传入一个调用者不期望的值，即使值的类型是正确的
+```
+
+### 三 异常处理
+
+为了保证程序的健壮性与容错性，即在遇到错误时程序不会崩溃，我们需要对异常进行处理，
+
+**如果错误发生的条件是可预知的，我们需要用if进行处理：在错误发生之前进行预防**
+
+```
+AGE=10
+while True:
+    age=input('>>: ').strip()
+    if age.isdigit(): #只有在age为字符串形式的整数时,下列代码才不会出错,该条件是可预知的
+        age=int(age)
+        if age == AGE:
+            print('you got it')
+            break
+```
 
 
-## 第八章 	网络编程
 
-## 第九章 	并发编程
+**如果错误发生的条件是不可预知的，则需要用到try...except：在错误发生之后进行处理**
 
-## 第十章  	数据库
+```
+#基本语法为
+try:
+    被检测的代码块
+except 异常类型：
+    try中一旦检测到异常，就执行这个位置的逻辑
+#举例
+try:
+    f=open('a.txt')
+    g=(line.strip() for line in f)
+    print(next(g))
+    print(next(g))
+    print(next(g))
+    print(next(g))
+    print(next(g))
+except StopIteration:
+    f.close()
+```
 
-## 第十一章 前端开发
+### 四 什么时候用异常处理
 
-## 第十二章	Django框架
+try...except是你附加给你的程序的一种异常处理的逻辑，与你的主要的工作是没有关系的，这种东西加的多了，会导致你的代码可读性变差
+
+只有在错误发生的条件无法预知的情况下，才应该加上try...except
 
 
 
