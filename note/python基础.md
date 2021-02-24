@@ -1,5 +1,7 @@
 # python学习笔记
 
+源自：https://www.cnblogs.com/linhaifeng/p/7278389.html
+
 ## 第一章 	计算机基础
 
 ### 1.1  主机显示
