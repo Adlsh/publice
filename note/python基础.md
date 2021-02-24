@@ -1,4 +1,4 @@
-# python学习笔记
+# python笔记
 
 源自：https://www.cnblogs.com/linhaifeng/p/7278389.html
 
