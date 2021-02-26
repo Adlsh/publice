@@ -12,11 +12,39 @@ PS1="\e[31m[\u@\h \w]$\e[m"^C
 
 ### 2,1 安装python
 
-yum -y install python3
+https://blog.csdn.net/sgl520lxl/article/details/81631051
 
-yum -y install pip3
+\#下载安装包
 
-yum -y install ipython3
+wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+
+\#安装依赖
+
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel gcc-c++ 
+
+cd /data/soft && tar xf [Python-3.7.0.tgz](https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz) && cd Python-3.7.0
+
+./configure --prefix=/usr/local/python3 
+
+make -j 4 && make install
+
+安装成功后去/usr/bin目录设置python和pip的软连接指向
+
+\# cd /usr/bin/
+
+\# ln -s /usr/local/python3/bin/python3.7 python3
+
+\# ln -s /usr/local/python3/bin/pip3.7 pip3
+
+
+
+安装pip3
+
+python3 get-pip.py
+
+安装ipython3
+
+pip3 install ipython3
 
 ## 第三章 	数据类型
 
