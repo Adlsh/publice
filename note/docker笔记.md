@@ -173,7 +173,7 @@ Copydocker cp 容器名称:容器目录 需要拷贝的文件或目录
  创建容器 添加-v参数 后边为   宿主机目录:容器目录，例如：
 
 ```
-Copydocker run -di -v /usr/local/myhtml:/usr/local/myhtml --name=mycentos3 centos:7
+docker run -di -v /usr/local/myhtml:/usr/local/myhtml --name=mycentos3 centos:7
 ```
 
 如果你共享的是多级的目录，可能会出现权限不足的提示。
@@ -201,12 +201,6 @@ Copydocker inspect --format='{{.NetworkSettings.IPAddress}}' 容器名称（容�
 ```
 Copydocker rm 容器名称（容器ID）
 ```
-
-
-
-
-
-## 3，容器连接
 
 
 
