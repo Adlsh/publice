@@ -32,6 +32,6 @@ git clone **** #克隆仓库
 
 git pull #同步到本地
 
-git clone git@github.com:Adlsh/publice.git (客户端/root/.ssh/下上传id_rsa,修改权限为600)
+git clone git@github.com:Adlsh/publice.git 	#克隆到本地(客户端/root/.ssh/下上传id_rsa,修改权限为600)
 
 git push git@github.com:Adlsh/publice.git  #推送同步到github
