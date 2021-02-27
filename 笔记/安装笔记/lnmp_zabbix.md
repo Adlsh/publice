@@ -22,6 +22,8 @@ export PATH=/usr/local/nginx/sbin:$PATH
 
 export PATH=/usr/local/zabbix/sbin:/usr/local/zabbix/bin:$PATH
 
+####################################nginx##########################################
+
 \#安装nginx：
 
 useradd -s /sbin/nologin nginx
@@ -36,133 +38,101 @@ cd /data/soft/ && tar xf nginx-1.8.0.tar.gz && cd nginx-1.8.0
 
 netstat -ntlp
 
+###################################mysql###################################################
+
 \#安装mysql：
 
-groupadd -r mysql && useradd -g mysql -r -s /sbin/nologin mysql
+yum -y install wget gcc gcc-c++ make cmake ncurses ncurses-devel libaio bison bison-devel perl perl-devel perl perl-devel 
 
-\#创建mysql安装目录和数据目录 授权
+\#下载mysql （百度网盘）
 
-mkdir /usr/local/mysql /data/mysql -p
+wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-boost-5.7.20.tar.gz
 
-chown -R mysql.mysql /usr/local/mysql /data/mysql
+groupadd mysql && useradd -g mysql mysql
 
-tar xf /data/soft/boost_1_59_0.tar.gz -C /usr/local/
+tar zxvf mysql-boost-5.7.20.tar.gz -C /usr/local/&& cd /usr/local/mysql-5.7.20
 
-mv /usr/local/boost_1_59_0 /usr/local/boost
+mkdir -p /data/mysql       #创建mysql数据库存放目录
 
-tar xf /data/soft/mysql-5.7.32.tar.gz -C /data/soft/ &&cd /data/soft/mysql-5.7.32
+ chown -R mysql:mysql /data/mysql    #设置mysql数据库目录权限
 
-cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \ -DSYSCONFDIR=/etc \ -DMYSQL_DATADIR=/data/mysql \ -DMYSQL_USER=mysql \ -DMYSQL_UNIX_ADDR=/usr/loacal/mysql/mysql.sock \ -DMYSQL_TCP_PORT=3306 \ -DWITH_MYISAM_STORAGE_ENGINE=1 \ -DWITH_INNOBASE_STORAGE_ENGINE=1 \ -DWITH_MEMORY_STORAGE_ENGINE=1 \ -DWITH_PARTITION_STORAGE_ENGINE=1 \ -DDEFAULT_CHARSET=utf8 \ -DDEFAULT_COLLATION=utf8_general_ci \ -DEXTRA_CHARSETS=all \ -DENABLED_LOCAL_INFILE=1 \ -DWITH_BOOST=boost
 
--DMYSQL_DATADIR=/data/mysql \
+make -j 4 && make install
 
--DMYSQL_UNIX_ADDR=/usr/local/mysql/mysql.sock \
+chown -R mysql:mysql /usr/local/mysql  #设置目录权限
 
--DMYSQL_TCP_PORT=3306 \
+\#初始化数据库 /usr/local/mysql/bin/mysqld --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql
 
--DSYSCONFDIR=/etc \
+cat >  /etc/my.cnf << EOF
 
--DDEFAULT_CHARSET=utf8 \
+[client]
 
--DEXTRA_CHARSETS=all \
+port = 3306
 
--DDEFAULT_COLLATION=utf8_general_ci \
+default-character-set=utf8
 
--DWITH_ARCHIVE_STORAGE_ENGINE=1 \
+socket = /usr/local/mysql/mysql.sock
 
--DWITH_MYISAM_STORAGE_ENGINE=1 \
+[mysql]
 
--DWITH_INNOBASE_STORAGE_ENGINE=1 \
+port = 3306
 
--DWITH_PARTITION_STORAGE_ENGINE=1 \
+default-character-set=utf8
 
--DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
-
--DWITH_PERFSCHEMA_STORAGE_ENGINE=1 \
-
--DWITH_LIBWRAP=0 \
-
--DENABLED_LOCAL_INFILE=1 \
-
--DWITH_DEBUG=0 \
-
--DWITH_BOOST=/usr/local/boost
-
-make -j 6 && make install
-
-\#mysql配置文件：
-
-cat > /etc/my.cnf << EOF
+socket = /usr/local/mysql/mysql.sock
 
 [mysqld]
 
-port=3306
+user = mysql
 
-socket=/usr/local/mysql/mysql.sock
+basedir = /usr/local/mysql
 
-datadir=/data/mysql
+datadir = /data/mysql
 
-basedir=/usr/local/mysql
+log-bin = /usr/local/mysql/binlog
 
-lower_case_table_names=1
+port = 3306
 
-character_set_server=utf8mb4
+skip-name-resolve
 
-collation_server=utf8mb4_general_ci
+character_set_server=utf8
 
-innodb_file_per_table=1
+pid-file = /usr/local/mysql/mysqld.pid
 
-skip_name_resolve=1
+socket = /usr/local/mysql/mysql.sock
 
-slow_query_log=1
+lower_case_table_names = 1
 
-slow_query_log_file=mysql-slow.log
+max_connections = 1000
 
-symbolic-links=0
+server-id = 1
 
-explicit_defaults_for_timestamp=1
-
-server_id=1
-
-sync_binlog=1
-
-innodb_flush_log_at_trx_commit=1
-
-log_bin=mysql-bin
-
-log_bin_index=mysql-bin.index
-
-binlog_format=mixed
-
-[mysqld_safe]
-
-log-error=/var/log/mysql.log
-
-pid-file=/var/run/mysql.pid
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,PIPES_AS_CONCAT,ANSI_QUOTES
 
 EOF
 
-\#初始化mysql数据库：
+\#复制启动文件到开机自动启动
 
-/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql     #（显示root的初始密码）
+cp /usr/local/mysql/support-files/mysql.server  /etc/rc.d/init.d/mysql    
 
-![img](C:\Users\Administrator\AppData\Local\YNote\data\qq6BD5FDEA7FE23473B47429AFB105C10E\3ce5d6c87dae4a5ba151e347b1cf83b4\clipboard.png)
+chmod 755 /etc/init.d/mysql  #增加执行权限
 
-\#添加mysql服务
+chkconfig --add mysql        #添加到启动服务里
 
-cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
+chkconfig mysql on          #加入开机启动
 
-chmod +x /etc/init.d/mysqld
+\#编辑启动文件加入下面两行
 
-chkconfig --add mysqld && chkconfig mysqld on
+#vim /etc/rc.d/init.d/mysql       
 
-systemctl start mysqld && systemctl enable mysqld && systemctl status mysqld
+​	basedir = /usr/local/mysql  #mysql程序安装路径
 
-![img](C:\Users\Administrator\AppData\Local\YNote\data\qq6BD5FDEA7FE23473B47429AFB105C10E\57664a4549fb4fefbcb436c85874586d\clipboard.png)
+​	datadir = /data/mysql  #Mysql数据库存放目录
 
-mysql安全向导（设置root密码，是否删除test库等）
+systemctl start mysql            #启动服务
 
-mysql_secure_installation
+#####################################php######################################################
 
 \#安装php
 
