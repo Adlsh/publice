@@ -55,8 +55,11 @@ cmd.run执行多条命令
 add_site:
   cmd.run:
     - name: |
-        C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
-        C:\Windows\System32\inetsrv\appcmd.exe add site "New Web Site"
+        sed -i '9a -A INPUT -s 39.102.67.197 -p tcp -m tcp --dport 9100 -j ACCEPT' /etc/sysconfig/iptables
+        systemctl daemon-reload
+        systemctl restart iptables
+        systemctl restart node_exporter
+        systemctl enable node_exporter
       
  单条命令：
 install-scala:
@@ -69,3 +72,4 @@ install-scala:
   cmd.run:
     - name: cd /usr/local/src && tar -C /usr/local/   -xf scala-2.12.11.tgz && ln -s /usr/local/scala-2.12.11/  /usr/local/scala
 ```
+
