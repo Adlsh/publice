@@ -31,7 +31,6 @@
 	salt '*' cp.get_dir salt://zabbix /tmp //吧salt-master端相应的目录，分发文件到minion端
 	salt '*' file.copy /tmp/zabbix.sls /tmp/sls //吧salt-master端对应文件拷贝到minion端相应目录下
 
-
 grains选项
 	salt '*' grains.ls  //查看grains分类
 	salt '*' grains.items  //查看grains所有信息
@@ -43,3 +42,30 @@ salt-run 选项
 	salt-run manage.down removekeys=True    查看down掉的minion，并将其删除
 	salt-run manage.status            查看minion的相关状态
 	salt-run manage.versions        查看slat的所有master和minion的版本信息
+
+
+
+![image-20210305102547672](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210305102547672.png)
+
+
+
+cmd.run执行多条命令
+
+```
+add_site:
+  cmd.run:
+    - name: |
+        C:\Windows\System32\inetsrv\appcmd.exe delete site "Default Web Site"
+        C:\Windows\System32\inetsrv\appcmd.exe add site "New Web Site"
+      
+ 单条命令：
+install-scala:
+  file.managed:
+    - name: /usr/local/src/scala-2.12.11.tgz
+    - source: salt://init/files/scala-2.12.11.tgz
+    - user: root
+    - group: root
+    - mode: 644
+  cmd.run:
+    - name: cd /usr/local/src && tar -C /usr/local/   -xf scala-2.12.11.tgz && ln -s /usr/local/scala-2.12.11/  /usr/local/scala
+```
