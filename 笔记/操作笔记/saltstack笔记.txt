@@ -45,9 +45,31 @@ salt-run 选项
 
 
 
-![image-20210305102547672](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210305102547672.png)
+java-dir:
+  file.directory:
+    - name: /usr/lib/java
+    - makedirs: True
 
+install-java:
+  file.managed:
+    - name: /usr/local/src/jdk-linux-x64.tar.gz
+    - source: salt://init/files/jdk-linux-x64.tar.gz
+    - user: root
+    - group: root
+    - mode: 644
 
+  cmd.run:
+    - name: cd /usr/local/src/ && tar -C /usr/lib/java/ -xf jdk-linux-x64.tar.gz
+
+/etc/profile:
+  file.append:
+    - text:
+      - JAVA_HOME=/usr/lib/java/jdk1.8.0_131
+      - JRE_HOME=/usr/lib/java/jdk1.8.0_131/jre
+      - CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+      - PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+      - export JAVA_HOME JRE_HOME CLASS_PATH PATH
+      - export PATH=/usr/local/scala/bin/:$PATH
 
 cmd.run执行多条命令
 
