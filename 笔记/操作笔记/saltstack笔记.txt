@@ -53,10 +53,10 @@ java-dir:
 install-java:
   file.managed:
     - name: /usr/local/src/jdk-linux-x64.tar.gz
-    - source: salt://init/files/jdk-linux-x64.tar.gz
-    - user: root
-    - group: root
-    - mode: 644
+        - source: salt://init/files/jdk-linux-x64.tar.gz
+        - user: root
+        - group: root
+        - mode: 644
 
   cmd.run:
     - name: cd /usr/local/src/ && tar -C /usr/lib/java/ -xf jdk-linux-x64.tar.gz
